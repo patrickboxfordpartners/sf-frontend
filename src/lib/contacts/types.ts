@@ -3,6 +3,43 @@
  * Field names stay snake_case so payloads map 1:1 onto the wire format.
  */
 
+/** Address type enumeration */
+export type AddressType = "Home" | "Work" | "Other";
+
+/** `AddressRead` — a stored address */
+export interface Address {
+  id: number;
+  contact_id: number;
+  type: AddressType;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  postal_code: string | null;
+  country: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Address creation payload */
+export interface AddressCreate {
+  type: AddressType;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postal_code?: string | null;
+  country?: string | null;
+}
+
+/** Address update payload */
+export interface AddressUpdate {
+  type?: AddressType;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postal_code?: string | null;
+  country?: string | null;
+}
+
 /** `ContactRead` — a stored contact, as returned by every contact endpoint. */
 export interface Contact {
   id: number;
