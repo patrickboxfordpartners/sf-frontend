@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AlertCircle, Loader2 } from "lucide-react";
 import Field from "@/components/ui/Field";
 import Button, { buttonClasses } from "@/components/ui/Button";
+import PhotoUpload from "@/components/contacts/PhotoUpload";
 import { CONTACT_FIELD_GROUPS } from "@/lib/contacts/schema";
 import {
   EMPTY_FORM_STATE,
@@ -84,14 +85,39 @@ export default function ContactForm({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {group.fields.map((field) => (
-              <Field
-                key={field.name}
-                field={field}
-                defaultValue={valueFor(field.name)}
-                error={state.fieldErrors?.[field.name]}
-              />
-            ))}
+            {group.fields.map((field) => {
+              // Special handling for photo field
+              if (field.name === "photo") {
+                return (
+                  <div key={field.name} className="sm:col-span-2">
+                    <label className="mb-1.5 block text-[13px] font-medium text-foreground">
+                      {field.label}
+                      <span className="ml-1.5 text-[11px] font-normal text-muted-foreground">
+                        optional
+                      </span>
+                    </label>
+                    <PhotoUpload
+                      currentPhoto={valueFor(field.name)}
+                      name={field.name}
+                    />
+                    {state.fieldErrors?.photo && (
+                      <p className="mt-1.5 text-[13px] text-destructive">
+                        {state.fieldErrors.photo}
+                      </p>
+                    )}
+                  </div>
+                );
+              }
+              // Regular field rendering
+              return (
+                <Field
+                  key={field.name}
+                  field={field}
+                  defaultValue={valueFor(field.name)}
+                  error={state.fieldErrors?.[field.name]}
+                />
+              );
+            })}
           </div>
         </fieldset>
       ))}

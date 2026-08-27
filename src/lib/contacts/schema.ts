@@ -52,6 +52,12 @@ export const contactInputSchema = z.object({
     .transform((value) => value || null)
     .nullable()
     .default(null),
+  photo: z
+    .string()
+    .trim()
+    .transform((value) => value || null)
+    .nullable()
+    .default(null),
 }) satisfies z.ZodType<ContactInput, unknown>;
 
 export type ContactFormValues = z.input<typeof contactInputSchema>;
@@ -204,6 +210,19 @@ export const CONTACT_FIELD_GROUPS: ContactFieldGroup[] = [
         type: "textarea",
         maxLength: 10_000,
         placeholder: "Met at the SF hackathon.",
+        wide: true,
+      },
+    ],
+  },
+  {
+    title: "Photo",
+    description: "Profile picture (max 2MB, JPEG/PNG).",
+    fields: [
+      {
+        name: "photo",
+        label: "Photo",
+        type: "text",
+        maxLength: 3_000_000,
         wide: true,
       },
     ],
