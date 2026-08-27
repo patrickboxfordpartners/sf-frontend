@@ -3,7 +3,7 @@ import type { Address } from "@/lib/contacts/types";
 
 const ADDRESS_TYPE_ICONS = {
   Home,
-  Work,
+  Work: Briefcase,
   Other: MapPin,
 };
 

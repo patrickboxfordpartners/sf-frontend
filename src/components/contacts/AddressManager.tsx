@@ -11,7 +11,7 @@ interface AddressManagerProps {
 }
 
 const ADDRESS_TYPE_ICONS = {
-  Home: Home,
+  Home,
   Work: Briefcase,
   Other: MapPin,
 };
