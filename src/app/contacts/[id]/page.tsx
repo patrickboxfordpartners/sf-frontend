@@ -5,8 +5,10 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, Pencil } from "lucide-react";
 import ContactAvatar from "@/components/contacts/ContactAvatar";
 import DeleteContactButton from "@/components/contacts/DeleteContactButton";
+import AddressList from "@/components/contacts/AddressList";
 import { buttonClasses } from "@/components/ui/Button";
 import { getContact } from "@/lib/contacts/api";
+import { listAddresses } from "@/lib/addresses/api";
 import { addressLine, formatTimestamp, jobLine } from "@/lib/contacts/format";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -39,8 +41,12 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default async function ContactDetailPage({ params }: PageProps) {
-  const contact = await getContact(parseId((await params).id));
+  const contactId = parseId((await params).id);
+  const contact = await getContact(contactId);
   if (!contact) notFound();
+
+  // Fetch addresses for this contact
+  const addresses = await listAddresses(contactId).catch(() => []);
 
   const subtitle = jobLine(contact);
   const address = addressLine(contact);
@@ -109,6 +115,14 @@ export default async function ContactDetailPage({ params }: PageProps) {
           ) : null}
         </Row>
       </dl>
+
+      {/* Addresses Section */}
+      <div className="space-y-3">
+        <h2 className="font-display text-lg font-semibold text-foreground">Addresses</h2>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <AddressList addresses={addresses} />
+        </div>
+      </div>
 
       <dl className="rounded-lg border border-border bg-card/50 text-[13px]">
         <Row label="ID">
