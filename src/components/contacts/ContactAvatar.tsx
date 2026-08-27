@@ -8,18 +8,30 @@ const SIZES = {
   lg: "h-14 w-14 text-lg",
 } as const;
 
-/** Initials bubble, tinted with a hue derived from the contact's email. */
+/** Profile picture or initials bubble, tinted with a hue derived from the contact's email. */
 export default function ContactAvatar({
   contact,
   size = "md",
 }: {
-  contact: Pick<Contact, "first_name" | "last_name" | "email">;
+  contact: Pick<Contact, "first_name" | "last_name" | "email" | "photo">;
   size?: keyof typeof SIZES;
 }) {
   const style = {
     "--avatar-hue": avatarHue(contact.email),
   } as CSSProperties;
 
+  // Show photo if available, circular LinkedIn style
+  if (contact.photo) {
+    return (
+      <img
+        src={contact.photo}
+        alt={`${contact.first_name} ${contact.last_name}`}
+        className={`inline-flex shrink-0 rounded-full object-cover aspect-square ${SIZES[size]}`}
+      />
+    );
+  }
+
+  // Fallback to initials
   return (
     <span
       aria-hidden="true"
